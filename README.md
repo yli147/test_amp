@@ -12,7 +12,7 @@ Compile QEMU
 cd $WORKDIR
 git clone https://github.com/qemu/qemu.git --depth 1 --branch v7.2.0
 pushd qemu
-git apply ../test_amp/0001-Add-second-uart-for-secure-domain.patch
+git apply ../0001-Add-second-uart-for-secure-domain.patch
 ./configure --target-list=riscv64-softmmu --enable-slirp
 make -j$(nproc)
 popd
