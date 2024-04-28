@@ -19,6 +19,9 @@
 	};
 
 	chosen {
+		linux,initrd-end = <0x882fe208>;
+		linux,initrd-start = <0x88200000>;
+		bootargs = "root=/dev/vda ro console=ttyS0";
 		rng-seed = <0x1c8fba36 0x11c55ea9 0x5f88dab8 0xeeceaf7b 0x57d0ac47 0xf075ac8a 0x89db86a2 0x9cba55d>;
 		stdout-path = "/soc/serial@10000000";
 		opensbi-domains {
