@@ -76,6 +76,16 @@ make CROSS_COMPILE=riscv64-linux-gnu- ARCH=riscv INSTALL_MOD_STRIP=1 -j`nproc` b
 popd
 ```
 
+Run u-boot + linux (Need GUI):
+```
+cd $WORKDIR
+./run.sh
+```
+
+----------------BACKUP-------------------------
+Create initrd for rt world os
+by following https://github.com/intel-sandbox/personal.yli147.riscv64-bringup/tree/master
+
 Compile Rootfs
 ```
 cd $WORKDIR
@@ -85,10 +95,6 @@ make qemu_riscv64_virt_defconfig
 make -j $(nproc)
 ls ./output/images/rootfs.ext2
 ```
-
-Create initrd for rt world os
-by following https://github.com/intel-sandbox/personal.yli147.riscv64-bringup/tree/master
-
 
 Create Disk Image for normal world os
 ```
@@ -133,9 +139,5 @@ sudo umount ./mnt
 sudo losetup -D ${loopdevice}
 ```
 
-Run u-boot + linux (Need GUI):
-```
-cd $WORKDIR
-./run.sh
-```
+
 
