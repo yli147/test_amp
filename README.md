@@ -56,9 +56,11 @@ CROSS_COMPILE=riscv64-linux-gnu- make qemu-riscv64_smode_defconfig
 CROSS_COMPILE=riscv64-linux-gnu- make -j`nproc` menuconfig
 General setup    
 	(0xA0200000) Static location for the initial stack pointer
-    (0xA0200000) Address in memory to use by default     
-    (0xA0200000) Text Base   
+	(0xA0200000) Address in memory to use by default     
+	(0xA0200000) Text Base   
 	(0xA0200000) Physical start address of boot monitor code
+Console                                                                                                                                       x
+  	(0xA1000000) Address of the pre-console buffer
 CROSS_COMPILE=riscv64-linux-gnu- make -j`nproc`
 popd 
 ```
