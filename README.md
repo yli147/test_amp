@@ -82,6 +82,27 @@ cd $WORKDIR
 ./run.sh
 ```
 
+--- Test with RT Thread ---
+```
+cd $WORKDIR
+git clone https://github.com/intel-sandbox/personal.yli147.rt-thread.git -b rtthread_AMP rtthread
+sudo tar xf rtthread/toolchain/tool-root1.tar.gz -C /opt/
+pushd rtthread/bsp/starfive/jh7110
+scons
+popd
+
+dtc -I dts -O dtb -o qemu-virt-new.dtb ./qemu-virt-new.dts
+
+./qemu/build/qemu-system-riscv64 \
+-machine virt -nographic -m 8G -smp 4 \
+-dtb ./qemu-virt-new.dtb \
+-bios opensbi/build/platform/generic/firmware/fw_jump.elf \
+-kernel ./linux-6.8.2/arch/riscv/boot/Image \
+-device loader,file=./rtthread/bsp/starfive/jh7110/rtthread.bin,addr=0xAE800000 \
+-initrd ./initramfs.cpio.gz -append "root=/dev/vda ro console=ttyS0" \
+-device virtio-net-device,netdev=eth0 -netdev user,id=eth0
+```
+
 ----------------BACKUP-------------------------
 Create initrd for rt world os
 by following https://github.com/intel-sandbox/personal.yli147.riscv64-bringup/tree/master
