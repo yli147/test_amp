@@ -35,8 +35,6 @@ dtc -I dts -O dtb -o qemu-virt-amp.dtb ./qemu-virt-amp.dts
 dtc -I dts -O dtb -o qemu-virt-amp-nw.dtb ./qemu-virt-amp-nw.dts
 dtc -I dts -O dtb -o qemu-virt-amp-rtw.dtb ./qemu-virt-amp-rtw.dts
 
-dtc -I dts -O dtb -o qemu-virt-new.dtb ./qemu-virt.dts
-
 OR
 ./qemu/build/qemu-system-riscv64 \
 	-machine virt,dumpdtb=qemu-virt.dtb -nographic -m 8G -smp 4 \
