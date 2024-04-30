@@ -23,28 +23,9 @@
 		linux,initrd-start = <0x88200000>;
 		bootargs = "root=/dev/vda ro console=ttyS0";
 		rng-seed = <0x1c8fba36 0x11c55ea9 0x5f88dab8 0xeeceaf7b 0x57d0ac47 0xf075ac8a 0x89db86a2 0x9cba55d>;
-		stdout-path = "/soc/serial@10000000";
+		stdout-path = "/soc/serial@10002000";
 		opensbi-domains {
 			compatible = "opensbi,domain,config";
-/* 
-			rpmsg_shmem: rpmsg_shmem {
-				compatible = "opensbi,domain,memregion";
-				base = <0x0 0xae400000>;
-				order = <22>;
-			};
-
-			rtcode: rtcode {
-				compatible = "opensbi,domain,memregion";
-				base = <0x0 0xae800000>;
-				order = <23>;
-			};
-
-			rtheap: rtheap {
-				compatible = "opensbi,domain,memregion";
-				base = <0x0 0xaf000000>;
-				order = <24>;
-			};
-*/
 			allmem: allmem {
 				compatible = "opensbi,domain,memregion";
 				base = <0x0 0x0>;
@@ -53,23 +34,13 @@
 
 			udomain: u-domain {
 				compatible = "opensbi,domain,instance";
-				possible-harts = <&cpu0 &cpu1 &cpu2>;
+				possible-harts = <&cpu1 &cpu2>;
 				regions = <&allmem 0x3f>;
 				next-addr = <0x0 0x80200000>;
 				next-arg1 = <0x0 0xB2200000>;
 				boot-hart = <&cpu1>;
 				system-reset-allowed;
 				system-suspend-allowed;
-			};
-
-			rtdomain: rt-domain {
-				compatible = "opensbi,domain,instance";
-				possible-harts = <&cpu3>;
-				regions = <&allmem 0x3f>;
-				boot-hart = <&cpu3>;
-				next-arg1 = <0x0 0xA2200000>;
-				next-addr = <0x0 0xA0200000>;
-				next-mode = <0x1>;
 			};
 		};
 	};
@@ -105,7 +76,7 @@
 		#address-cells = <0x01>;
 		#size-cells = <0x00>;
 		timebase-frequency = <0x989680>;
-
+/*
 		cpu0:cpu@0 {
 			phandle = <0x07>;
 			device_type = "cpu";
@@ -122,7 +93,7 @@
 				phandle = <0x08>;
 			};
 		};
-
+*/
 		cpu1:cpu@1 {
 			phandle = <0x05>;
 			device_type = "cpu";
@@ -165,7 +136,7 @@
 			compatible = "riscv";
 			riscv,isa = "rv64imafdch_zicsr_zifencei_zihintpause_zba_zbb_zbc_zbs_sstc";
 			mmu-type = "riscv,sv48";
-			opensbi-domain = <&rtdomain>;
+			opensbi-domain = <&udomain>;
 			interrupt-controller {
 				#interrupt-cells = <0x01>;
 				interrupt-controller;
@@ -177,11 +148,11 @@
 		cpu-map {
 
 			cluster0 {
-
+/*
 				core0 {
 					cpu = <0x07>;
 				};
-
+*/
 				core1 {
 					cpu = <0x05>;
 				};
@@ -189,10 +160,11 @@
 				core2 {
 					cpu = <0x03>;
 				};
-
+/*
 				core3 {
 					cpu = <0x01>;
 				};
+*/				
 			};
 		};
 	};
@@ -215,11 +187,11 @@
 			compatible = "google,goldfish-rtc";
 		};
 */
-		serial@10000000 {
-			interrupts = <0x0a>;
+		serial@10002000 {
+			interrupts = <0x0c>;
 			interrupt-parent = <0x09>;
 			clock-frequency = <0x384000>;
-			reg = <0x00 0x10000000 0x00 0x100>;
+			reg = <0x00 0x10002000 0x00 0x100>;
 			compatible = "ns16550a";
 		};
 /*
@@ -304,7 +276,8 @@
 			phandle = <0x09>;
 			riscv,ndev = <0x60>;
 			reg = <0x00 0xc000000 0x00 0x600000>;
-			interrupts-extended = <0x08 0x0b 0x08 0x09 0x06 0x0b 0x06 0x09 0x04 0x0b 0x04 0x09 0x02 0x0b 0x02 0x09>;
+			/* interrupts-extended = <0x08 0x0b 0x08 0x09 0x06 0x0b 0x06 0x09 0x04 0x0b 0x04 0x09 0x02 0x0b 0x02 0x09>; */
+			interrupts-extended = <0x02 0x0b 0x02 0x09 0x06 0x0b 0x06 0x09 0x04 0x0b 0x04 0x09>;
 			interrupt-controller;
 			compatible = "sifive,plic-1.0.0\0riscv,plic0";
 			#address-cells = <0x00>;
@@ -312,7 +285,7 @@
 		};
 
 		clint@2000000 {
-			interrupts-extended = <0x08 0x03 0x08 0x07 0x06 0x03 0x06 0x07 0x04 0x03 0x04 0x07 0x02 0x03 0x02 0x07>;
+			interrupts-extended = <0x06 0x03 0x06 0x07 0x04 0x03 0x04 0x07>;
 			reg = <0x00 0x2000000 0x00 0x10000>;
 			compatible = "sifive,clint0\0riscv,clint0";
 		};
