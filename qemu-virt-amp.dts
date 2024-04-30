@@ -32,7 +32,7 @@
 				order = <64>;
 			};
 
-			udomain: u-domain {
+			rtdomain: rt-domain {
 				compatible = "opensbi,domain,instance";
 				possible-harts = <&cpu1 &cpu2 &cpu3>;
 				regions = <&allmem 0x3f>;
@@ -43,7 +43,7 @@
 				system-suspend-allowed;
 			};
 
-			rtdomain: rt-domain {
+			udomain: u-domain {
 				compatible = "opensbi,domain,instance";
 				possible-harts = <&cpu0>;
 				regions = <&allmem 0x3f>;
@@ -95,7 +95,7 @@
 			compatible = "riscv";
 			riscv,isa = "rv64imafdch_zicsr_zifencei_zihintpause_zba_zbb_zbc_zbs_sstc";
 			mmu-type = "riscv,sv48";
-			opensbi-domain = <&rtdomain>;
+			opensbi-domain = <&udomain>;
 			interrupt-controller {
 				#interrupt-cells = <0x01>;
 				interrupt-controller;
@@ -112,7 +112,7 @@
 			compatible = "riscv";
 			riscv,isa = "rv64imafdch_zicsr_zifencei_zihintpause_zba_zbb_zbc_zbs_sstc";
 			mmu-type = "riscv,sv48";
-			opensbi-domain = <&udomain>;
+			opensbi-domain = <&rtdomain>;
 			interrupt-controller {
 				#interrupt-cells = <0x01>;
 				interrupt-controller;
@@ -129,7 +129,7 @@
 			compatible = "riscv";
 			riscv,isa = "rv64imafdch_zicsr_zifencei_zihintpause_zba_zbb_zbc_zbs_sstc";
 			mmu-type = "riscv,sv48";
-			opensbi-domain = <&udomain>;
+			opensbi-domain = <&rtdomain>;
 			interrupt-controller {
 				#interrupt-cells = <0x01>;
 				interrupt-controller;
@@ -146,7 +146,7 @@
 			compatible = "riscv";
 			riscv,isa = "rv64imafdch_zicsr_zifencei_zihintpause_zba_zbb_zbc_zbs_sstc";
 			mmu-type = "riscv,sv48";
-			opensbi-domain = <&udomain>;
+			opensbi-domain = <&rtdomain>;
 			interrupt-controller {
 				#interrupt-cells = <0x01>;
 				interrupt-controller;
