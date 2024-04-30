@@ -92,10 +92,11 @@ Create Disk Image
 ```
 cd $WORKDIR
 git clone https://github.com/buildroot/buildroot.git -b 2023.08.x
-cd buildroot
+pushd buildroot
 make qemu_riscv64_virt_defconfig
 make -j $(nproc)
 ls ./output/images/rootfs.ext2
+popd
 
 dd if=/dev/zero of=disk.img bs=1M count=128
 sudo sgdisk -g --clear --set-alignment=1 \
