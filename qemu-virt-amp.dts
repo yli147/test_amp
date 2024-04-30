@@ -26,25 +26,6 @@
 		stdout-path = "/soc/serial@10000000";
 		opensbi-domains {
 			compatible = "opensbi,domain,config";
-/* 
-			rpmsg_shmem: rpmsg_shmem {
-				compatible = "opensbi,domain,memregion";
-				base = <0x0 0xae400000>;
-				order = <22>;
-			};
-
-			rtcode: rtcode {
-				compatible = "opensbi,domain,memregion";
-				base = <0x0 0xae800000>;
-				order = <23>;
-			};
-
-			rtheap: rtheap {
-				compatible = "opensbi,domain,memregion";
-				base = <0x0 0xaf000000>;
-				order = <24>;
-			};
-*/
 			allmem: allmem {
 				compatible = "opensbi,domain,memregion";
 				base = <0x0 0x0>;

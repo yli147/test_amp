@@ -29,7 +29,7 @@
 				base = <0x0 0x0>;
 				order = <64>;
 			};
-			rtdomain: rt-domain {
+			udomain: u-domain {
 				compatible = "opensbi,domain,instance";
 				possible-harts = <&cpu0>;
 				regions = <&allmem 0x3f>;
@@ -82,7 +82,7 @@
 			riscv,isa = "rv64imafdch_zicsr_zifencei_zihintpause_zba_zbb_zbc_zbs_sstc";
 			mmu-type = "riscv,sv48";
 
-			opensbi-domain = <&rtdomain>;
+			opensbi-domain = <&udomain>;
 			interrupt-controller {
 				#interrupt-cells = <0x01>;
 				interrupt-controller;

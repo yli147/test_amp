@@ -32,8 +32,8 @@ Generate DTB
 ```
 cd $WORKDIR
 dtc -I dts -O dtb -o qemu-virt-amp.dtb ./qemu-virt-amp.dts
-dtc -I dts -O dtb -o qemu-virt-amp-nw.dtb ./qemu-virt-amp-nw.dts
-dtc -I dts -O dtb -o qemu-virt-amp-rtw.dtb ./qemu-virt-amp-rtw.dts
+dtc -I dts -O dtb -o qemu-virt-amp-rt-domain.dtb ./qemu-virt-amp-rt-domain.dts
+dtc -I dts -O dtb -o qemu-virt-amp-normal-domain.dtb ./qemu-virt-amp-normal-domain.dts
 
 OR
 ./qemu/build/qemu-system-riscv64 \
