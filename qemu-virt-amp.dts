@@ -34,7 +34,7 @@
 
 			rtdomain: rt-domain {
 				compatible = "opensbi,domain,instance";
-				possible-harts = <&cpu1 &cpu2 &cpu3>;
+				possible-harts = <&cpu1 &cpu2>;
 				regions = <&allmem 0x3f>;
 				next-addr = <0x0 0x80200000>;
 				next-arg1 = <0x0 0xB2200000>;
@@ -146,7 +146,7 @@
 			compatible = "riscv";
 			riscv,isa = "rv64imafdch_zicsr_zifencei_zihintpause_zba_zbb_zbc_zbs_sstc";
 			mmu-type = "riscv,sv48";
-			opensbi-domain = <&rtdomain>;
+			opensbi-domain = <&udomain>;
 			interrupt-controller {
 				#interrupt-cells = <0x01>;
 				interrupt-controller;
