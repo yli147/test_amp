@@ -84,6 +84,10 @@ cd $WORKDIR
 ./run.sh
 ```
 
+Run dual Linux + Linux (Need GUI):
+
+Create initrd for rt world os by following https://github.com/intel-sandbox/personal.yli147.riscv64-bringup/tree/master, or just use the initramfs.cpio.gz in this repo
+
 Create Disk Image
 ```
 cd $WORKDIR
@@ -128,13 +132,13 @@ EOF
 sudo umount ./mnt
 sudo losetup -D ${loopdevice}
 ```
-Run dual Linux + Linux (Need GUI):
+
 ```
 cd $WORKDIR
 ./run-disk.sh
 ```
 
---- Test with RT Thread ---
+Run Linux + RT Thread (Need GUI):
 ```
 cd $WORKDIR
 git clone https://github.com/intel-sandbox/personal.yli147.rt-thread.git -b rtthread_AMP rtthread
@@ -153,20 +157,6 @@ dtc -I dts -O dtb -o qemu-virt-new.dtb ./qemu-virt-new.dts
 -device loader,file=./rtthread/bsp/starfive/jh7110/rtthread.bin,addr=0xAE800000 \
 -initrd ./initramfs.cpio.gz -append "root=/dev/vda ro console=ttyS0" \
 -device virtio-net-device,netdev=eth0 -netdev user,id=eth0
-```
-
-----------------BACKUP-------------------------
-Create initrd for rt world os
-by following https://github.com/intel-sandbox/personal.yli147.riscv64-bringup/tree/master
-
-Compile Rootfs
-```
-cd $WORKDIR
-git clone https://github.com/buildroot/buildroot.git -b 2023.08.x
-cd buildroot
-make qemu_riscv64_virt_defconfig
-make -j $(nproc)
-ls ./output/images/rootfs.ext2
 ```
 
 
