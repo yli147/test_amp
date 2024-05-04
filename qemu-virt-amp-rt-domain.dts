@@ -34,13 +34,23 @@
 
 			rtdomain: rt-domain {
 				compatible = "opensbi,domain,instance";
-				possible-harts = <&cpu1 &cpu2>;
+				possible-harts = <&cpu3>;
 				regions = <&allmem 0x3f>;
 				next-addr = <0x0 0x80200000>;
 				next-arg1 = <0x0 0xB2200000>;
-				boot-hart = <&cpu1>;
+				boot-hart = <&cpu3>;
 				system-reset-allowed;
 				system-suspend-allowed;
+			};
+
+			udomain: u-domain {
+				compatible = "opensbi,domain,instance";
+				possible-harts = <&cpu0 &cpu1 &cpu2>;
+				regions = <&allmem 0x3f>;
+				boot-hart = <&cpu0>;
+				next-arg1 = <0x0 0xA2200000>;
+				next-addr = <0x0 0xA0200000>;
+				next-mode = <0x1>;
 			};
 		};
 	};
@@ -76,15 +86,33 @@
 		#address-cells = <0x01>;
 		#size-cells = <0x00>;
 		timebase-frequency = <0x989680>;
+
+		cpu0:cpu@0 {
+			phandle = <0x07>;
+			device_type = "cpu";
+			reg = <0x00>;
+			status = "disabled";
+			compatible = "riscv";
+			riscv,isa = "rv64imafdch_zicsr_zifencei_zihintpause_zba_zbb_zbc_zbs_sstc";
+			mmu-type = "riscv,sv48";
+			opensbi-domain = <&udomain>;
+			interrupt-controller {
+				#interrupt-cells = <0x01>;
+				interrupt-controller;
+				compatible = "riscv,cpu-intc";
+				phandle = <0x08>;
+			};
+		};
+
 		cpu1:cpu@1 {
 			phandle = <0x05>;
 			device_type = "cpu";
 			reg = <0x01>;
-			status = "okay";
+			status = "disabled";
 			compatible = "riscv";
 			riscv,isa = "rv64imafdch_zicsr_zifencei_zihintpause_zba_zbb_zbc_zbs_sstc";
 			mmu-type = "riscv,sv48";
-			opensbi-domain = <&rtdomain>;
+			opensbi-domain = <&udomain>;
 			interrupt-controller {
 				#interrupt-cells = <0x01>;
 				interrupt-controller;
@@ -97,11 +125,11 @@
 			phandle = <0x03>;
 			device_type = "cpu";
 			reg = <0x02>;
-			status = "okay";
+			status = "disabled";
 			compatible = "riscv";
 			riscv,isa = "rv64imafdch_zicsr_zifencei_zihintpause_zba_zbb_zbc_zbs_sstc";
 			mmu-type = "riscv,sv48";
-			opensbi-domain = <&rtdomain>;
+			opensbi-domain = <&udomain>;
 			interrupt-controller {
 				#interrupt-cells = <0x01>;
 				interrupt-controller;
@@ -109,7 +137,7 @@
 				phandle = <0x04>;
 			};
 		};
-/*
+
 		cpu3:cpu@3 {
 			phandle = <0x01>;
 			device_type = "cpu";
@@ -126,9 +154,15 @@
 				phandle = <0x02>;
 			};
 		};
-*/
+
 		cpu-map {
+
 			cluster0 {
+
+				core0 {
+					cpu = <0x07>;
+				};
+
 				core1 {
 					cpu = <0x05>;
 				};
@@ -136,11 +170,10 @@
 				core2 {
 					cpu = <0x03>;
 				};
-/*
+
 				core3 {
 					cpu = <0x01>;
 				};
-*/				
 			};
 		};
 	};
@@ -166,8 +199,7 @@
 			phandle = <0x09>;
 			riscv,ndev = <0x60>;
 			reg = <0x00 0xc000000 0x00 0x600000>;
-			/* interrupts-extended = <0x08 0x0b 0x08 0x09 0x06 0x0b 0x06 0x09 0x04 0x0b 0x04 0x09 0x02 0x0b 0x02 0x09>; */
-			interrupts-extended = <0x04 0x0b 0x04 0x09 0x06 0x0b 0x06 0x09 0x04 0x0b 0x04 0x09>;
+			interrupts-extended = <0x08 0x0b 0x08 0x09 0x06 0x0b 0x06 0x09 0x04 0x0b 0x04 0x09 0x02 0x0b 0x02 0x09>;
 			interrupt-controller;
 			compatible = "sifive,plic-1.0.0\0riscv,plic0";
 			#address-cells = <0x00>;
@@ -175,7 +207,7 @@
 		};
 
 		clint@2000000 {
-			interrupts-extended = <0x06 0x03 0x06 0x07 0x04 0x03 0x04 0x07>;
+			interrupts-extended = <0x08 0x03 0x08 0x07 0x06 0x03 0x06 0x07 0x04 0x03 0x04 0x07 0x02 0x03 0x02 0x07>;
 			reg = <0x00 0x2000000 0x00 0x10000>;
 			compatible = "sifive,clint0\0riscv,clint0";
 		};
