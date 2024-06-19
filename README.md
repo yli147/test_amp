@@ -2,7 +2,7 @@
 
 Download this project
 ```
-git clone https://github.com/intel-sandbox/personal.yli147.test_amp.git k1-amp
+git clone https://github.com/intel-sandbox/personal.yli147.test_amp.git -b k1-amp test_amp
 cd test_amp
 export WORKDIR=`pwd`
 ```
