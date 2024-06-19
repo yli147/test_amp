@@ -10,7 +10,7 @@ export WORKDIR=`pwd`
 Compile OpenSBI
 ```
 cd $WORKDIR
-git clone https://github.com/yli147/opensbi.git -b v1.3-k1 opensbi
+git clone https://github.com/yli147/opensbi.git -b k1-amp opensbi
 pushd opensbi
 CROSS_COMPILE=/opt/riscv/bin/riscv64-unknown-linux-gnu- make -j$(nproc) PLATFORM_DEFCONFIG=k1_defconfig PLATFORM=generic
 export OPENSBI=`realpath build/platform/generic/firmware/fw_dynamic.bin`
