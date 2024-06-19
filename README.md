@@ -25,7 +25,7 @@ make
 popd
 ```
 
-Compile U-boot
+Compile U-boot (The ns-hello.bin must be 64 bits aligned, otherwise the device tree blob won't be in 64 bits address which will cause opensbi boot failue)
 ```
 cd $WORKDIR
 git clone https://github.com/yli147/u-boot.git -b k1-amp u-boot
@@ -35,6 +35,8 @@ CROSS_COMPILE=/opt/riscv/bin/riscv64-unknown-linux-gnu- make -j8
 cp ../pi-opensbi/build/platform/generic/firmware/fw_dynamic.itb .
 cp ../test_context_switch/build/s-hello/s-hello.bin .
 cp ../test_context_switch/build/ns-hello/ns-hello.bin .
+truncate -s %64 s-hello.bin
+truncate -s %64 ns-hello.bin
 ./tools/mkimage -f u-boot-new.its -A riscv -O u-boot -T firmware u-boot-new.itb
 popd
 ```
