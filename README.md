@@ -17,7 +17,7 @@ export OPENSBI=`realpath build/platform/generic/firmware/fw_dynamic.bin`
 popd
 ```
 
-Compile U-boot
+Compile Test Application
 ```
 git clone https://github.com/yli147/test_context_switch.git -b k1-amp
 pushd test_context_switch
