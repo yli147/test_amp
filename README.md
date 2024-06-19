@@ -49,9 +49,12 @@ dd if=u-boot/FSBL.bin of=/dev/sdX1
 ```
 
 Notes:
-In the latest code u-boot device tree, I have added uart9 (GPIO72/GPIO73) as the default stdout uart, so you need connect GPIO72/73 with a UART terminal to see the opensbi log.
+In the latest code u-boot device tree, I have added uart9 (GPIO72/GPIO73) as the default stdout uart, 
+so you need connect GPIO72/73 with a UART terminal to see the opensbi log.
 The u-boot-spl code also use the device tree, and keeps to use uart0 as the output
 
 ![IMG_20240619_170516](https://github.com/yli147/test_amp/assets/21300636/e07f2788-11ec-4fc5-b3a9-4e763f3c239d)
+
+![image](https://github.com/yli147/test_amp/assets/21300636/b4f480e9-853b-43a6-9eaf-486ec4c2b945)
 
 
