@@ -41,9 +41,9 @@ popd
 
 Flash Image (Make sure you have biandu_sdcard.img already flashed to the SDCard, then upgrade the SDCard with following steps )
 ```
-dd if=fw_dynamic.itb of=/dev/sde3
-dd if=u-boot-new.itb of=/dev/sde4
-dd if=FSBL.bin of=/dev/sde1
+dd if=u-boot/fw_dynamic.itb of=/dev/sde3
+dd if=u-boot/u-boot-new.itb of=/dev/sde4
+dd if=u-boot/FSBL.bin of=/dev/sde1
 ```
 
 
