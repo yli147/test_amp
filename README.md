@@ -32,7 +32,7 @@ git clone https://github.com/yli147/u-boot.git -b k1-amp u-boot
 pushd u-boot
 make k1_defconfig
 CROSS_COMPILE=/opt/riscv/bin/riscv64-unknown-linux-gnu- make -j8
-cp ../pi-opensbi/build/platform/generic/firmware/fw_dynamic.itb .
+cp ../opensbi/build/platform/generic/firmware/fw_dynamic.itb .
 cp ../test_context_switch/build/s-hello/s-hello.bin .
 cp ../test_context_switch/build/ns-hello/ns-hello.bin .
 truncate -s %64 s-hello.bin
