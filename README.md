@@ -71,6 +71,22 @@ tar xvf linux-6.8.2.tar.xz
 pushd linux-6.8.2
 make CROSS_COMPILE=riscv64-linux-gnu- ARCH=riscv defconfig 
 make CROSS_COMPILE=riscv64-linux-gnu- ARCH=riscv -j`nproc`
+make CROSS_COMPILE=riscv64-linux-gnu- ARCH=riscv menuconfig
+Location:                                                                                                                                          x
+  x     -> Platform type                                                                                                                                 x
+  x (1)   -> Allow configurations that result in non-portable kernels (NONPORTABLE [=y])
+Location:                                                                                                                                          x
+  x     -> Device Drivers                                                                                                                                x
+  x       -> Character devices                                                                                                                           x
+  x         -> Enable TTY (TTY [=y])                                                                                                                     x
+  x (1)       -> RISC-V SBI console support (HVC_RISCV_SBI [=y])
+Location:                                                                                                                                          x
+  x     -> Device Drivers                                                                                                                                x
+  x       -> Character devices                                                                                                                           x
+  x         -> Enable TTY (TTY [=y])                                                                                                                     x
+  x           -> Serial drivers                                                                                                                          x
+  x (1)         -> Early console using RISC-V SBI (SERIAL_EARLYCON_RISCV_SBI [=y]) 
+OR use the .config in this project
 make CROSS_COMPILE=riscv64-linux-gnu- ARCH=riscv INSTALL_MOD_STRIP=1 -j`nproc` tarbz2-pkg
 make CROSS_COMPILE=riscv64-linux-gnu- ARCH=riscv INSTALL_MOD_STRIP=1 -j`nproc` bindeb-pkg
 popd
