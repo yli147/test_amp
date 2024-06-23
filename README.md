@@ -50,7 +50,7 @@ dtc -I dts -O dtb -o qemu-virt-amp.dtb ./qemu-virt-amp.dts
 Compile U-boot
 ```
 cd $WORKDIR
-git clone https://github.com/intel-sandbox/personal.yli147.u-boot.git -b unmatched-amp u-boot
+git clone https://github.com/intel-sandbox/personal.yli147.u-boot.git -b qemu-amp u-boot
 pushd u-boot
 CROSS_COMPILE=riscv64-linux-gnu- make qemu-riscv64_smode_defconfig
 CROSS_COMPILE=riscv64-linux-gnu- make -j`nproc` menuconfig
