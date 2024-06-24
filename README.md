@@ -17,7 +17,7 @@ export OPENSBI=`realpath build/platform/generic/firmware/fw_dynamic.bin`
 popd
 ```
 
-Compile Test Application
+Compile Test Applications
 ```
 git clone https://github.com/yli147/test_context_switch.git -b k1-amp
 pushd test_context_switch
@@ -51,7 +51,7 @@ truncate -s %64 ns-hello.bin
 popd
 ```
 
-# Option2: Test AMP (Uboot +  one baremetal s-mode applications)
+# Option2: Test AMP (Uboot +  one baremetal s-mode application)
 ```
 pushd u-boot
 CROSS_COMPILE=/opt/riscv/bin/riscv64-unknown-linux-gnu- make -j8
