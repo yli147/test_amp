@@ -66,7 +66,7 @@ popd
 # Option3: Test AMP (Uboot +  Linux)
 ```
 git clone https://gitee.com/bianbu-linux/linux-6.1 -b bl-v1.0.y
-cd linux-6.1
+pushd linux-6.1
 make ARCH=riscv CROSS_COMPILE="/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu-" k1_defconfig
 make ARCH=riscv CROSS_COMPILE="/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu-" -j16
 popd
