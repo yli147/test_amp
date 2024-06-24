@@ -5,9 +5,9 @@ sudo sgdisk -g --clear --set-alignment=1 \
        --new=3:896:+384K:   --change-name=3:'opensbi' --attributes=3:set:2  \
 	--new=4:1664:+2M:   --change-name=4:'uboot'  --attributes=3:set:2  \
        disk.img
-loopdevice2=`sudo losetup --partscan --find --show ./bianbu-linux-k1-sdcard.img`
-sudo dd if=${loopdevice2}p2 of=env.bin
-sudo losetup -D ${loopdevice2}
+# loopdevice2=`sudo losetup --partscan --find --show ./bianbu-linux-k1-sdcard.img`
+# sudo dd if=${loopdevice2}p2 of=env.bin
+# sudo losetup -D ${loopdevice2}
 loopdevice=`sudo losetup --partscan --find --show ./disk.img`
 sudo dd if=u-boot/u-boot-new.itb of=${loopdevice}p4
 sudo dd if=u-boot/fw_dynamic.itb of=${loopdevice}p3
