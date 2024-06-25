@@ -16,13 +16,15 @@
 	};
 
 	chosen {
-		linux,initrd-end = <0x482fe208>;
+		/* linux,initrd-end = <0x482fe208>; */
+		linux,initrd-end = <0x48317fcf>;
 		linux,initrd-start = <0x48200000>;
 /*		
 		bootargs = "root=/dev/vda ro console=hvc0 earlycon=sbi";
 		stdout-path = "serial9:115200n8";
 */
-		bootargs = "earlycon=sbi console=ttyS0,115200 debug loglevel=8,initcall_debug=1 rdinit=/init.tmp";
+		/* bootargs = "earlycon=sbi console=ttyS0,115200 debug loglevel=8,initcall_debug=1 rdinit=/init.tmp"; */
+		bootargs = "earlycon=sbi console=ttyS0,115200 debug loglevel=8,initcall_debug=1 root=/dev/vda";
 		stdout-path = "serial0:115200n8";
 /*
 		opensbi-domains {
@@ -234,6 +236,7 @@
 		};
 	};
 
+/*
 	clocks {
 		#address-cells = <0x02>;
 		#size-cells = <0x02>;
@@ -287,7 +290,7 @@
 			phandle = <0x1c>;
 		};
 	};
-
+*/
 	soc {
 		compatible = "simple-bus";
 		#address-cells = <0x02>;
@@ -345,7 +348,7 @@
 			gpio-ranges = <0x1f 0x31 0x32 0x02 0x1f 0x3a 0x3b 0x01 0x1f 0x3f 0x40 0x05 0x1f 0x46 0x47 0x04 0x1f 0x4a 0x4b 0x01 0x1f 0x50 0x51 0x04 0x1f 0x5a 0x7f 0x03 0x1f 0x60 0x78 0x02 0x1f 0x6e 0x74 0x01 0x1f 0x72 0x86 0x03 0x1f 0x7b 0x8f 0x05>;
 			phandle = <0x2a>;
 		};
-
+/*
 		pinctrl@d401e000 {
 			compatible = "pinctrl-single";
 			reg = <0x00 0xd401e000 0x00 0x400>;
@@ -998,7 +1001,7 @@
 				phandle = <0x29>;
 			};
 		};
-
+*/
 		power-management@0 {
 			compatible = "spacemit,k1x-pm-domain";
 			reg = <0x00 0xd4050000 0x00 0x3004 0x00 0xd4282800 0x00 0x400>;
@@ -1028,7 +1031,7 @@
 			reg = <0x00 0xc0000000 0x00 0x400000>;
 			datarate = <0x960>;
 		};
-
+/*
 		ethernet@cac80000 {
 			compatible = "spacemit,k1x-emac";
 			reg = <0x00 0xcac80000 0x00 0x420>;
@@ -1658,6 +1661,7 @@
 				};
 			};
 		};
+*/		
 	};
 
 	binman {
@@ -1715,7 +1719,7 @@
 
 	memory@0 {
 		device_type = "memory";
-		reg = <0x00 0x00 0x00 0x80000000>;
+		reg = <0x00 0x40000000 0x00 0x40000000>;
 	};
 
 	usb3hub {
