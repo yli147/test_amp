@@ -8,8 +8,8 @@
 	modules_usrload = "8852bs";
 
 	aliases {
-		/* serial0 = "/soc/serial@d4017000"; */
-		serial0 = "/soc/uart@d4017800";
+		serial0 = "/soc/serial@d4017000";
+		serial1 = "/soc/uart@d4017800";
 		/*
 		serial1 = "/soc/uart@d4017100";
 		serial2 = "/soc/uart@d4017200";
@@ -1480,7 +1480,7 @@
 				};
 			};
 		};
-/*
+
 		serial@d4017000 {
 			compatible = "spacemit,pxa-uart";
 			reg = <0x00 0xd4017000 0x00 0x100>;
@@ -1501,7 +1501,7 @@
 			pinctrl-names = "default";
 			pinctrl-0 = <0x23>;
 		};
-
+/*
 		uart@d4017100 {
 			compatible = "spacemit,pxa-uart";
 			reg = <0x00 0xd4017100 0x00 0x100>;
@@ -2559,7 +2559,7 @@
 				reg-offset = <0x100>;
 			};
 		};
-/*
+
 		ethernet@cac80000 {
 			compatible = "spacemit,k1x-emac";
 			reg = <0x00 0xcac80000 0x00 0x420>;
@@ -3216,7 +3216,7 @@
 				pool;
 			};
 		};
-
+/*
 		linlon-v5@c0500000 {
 			compatible = "arm china,linlon-v5";
 			reg = <0x00 0xc0500000 0x00 0x10000>;
@@ -3231,7 +3231,7 @@
 			clk,pm-runtime,no-sleep;
 			status = "okay";
 		};
-
+*/
 		v2d@c0100000 {
 			compatible = "spacemit,v2d";
 			reg = <0x00 0xc0100000 0x00 0x1000>;
@@ -3721,7 +3721,7 @@
 			status = "okay";
 			power-domains = <0x20 0x04>;
 		};
-*/		
+	
 	};
 
 	pmu {
