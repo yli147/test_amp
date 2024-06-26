@@ -83,7 +83,7 @@ popd
 
 # Option4: Test AMP (Uboot +  Linux w/ two different terminal)
 ```
-git clone https://github.com/yli147/linux.git -b bl-v1.0.y linux-6.1
+git clone https://github.com/yli147/linux.git --single-branch -b bl-v1.0.y linux-6.1
 # original from https://gitee.com/bianbu-linux/linux-6.1 -b bl-v1.0.y
 pushd linux-6.1
 make ARCH=riscv CROSS_COMPILE="/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu-" k1_defconfig
