@@ -160,10 +160,16 @@ sudo dd if=${loopdevice}p6 of=/dev/sde6 bs=8M status=progress && sync
 ```
 Plugout and Plugin the SDCard again
 ```
+git clone https://github.com/yli147/linux.git --single-branch -b bl-v1.0.rc1 linux-6.1-rc1
+pushd linux-6.1-rc1
+make ARCH=riscv CROSS_COMPILE="/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu-" k1_defconfig
+make ARCH=riscv CROSS_COMPILE="/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu-" -j16
+popd
 mkdir -p ./mnt/
 sudo mount /dev/sde5 ./mnt/
 dtc -I dts -O dtb -o k1-x_deb1-bianbu.dtb k1-x_deb1-bianbu.dts
 sudo cp k1-x_deb1-bianbu.dtb ./mnt/spacemit/k1-x_deb1.dtb
+sudo cp linux-6.1-rc1/arch/riscv/boot/Image.itb ./mnt/vmlinuz-6.1.15
 sudo umount ./mnt
 ```
 
