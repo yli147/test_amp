@@ -7,8 +7,8 @@
 	model = "spacemit k1-x deb1 board";
 
 	aliases {
-		serial0 = "/soc/uart@d4017000";
-		serial9 = "/soc/uart@d4017800";
+		serial0 = "/soc/uart@d4017800";
+		/* serial9 = "/soc/uart@d4017800"; */
 		mmc0 = "/soc/sdh@d4280000";
 		mmc1 = "/soc/sdh@d4280800";
 		mmc2 = "/soc/sdh@d4281000";
@@ -1008,7 +1008,7 @@
 			#power-domain-cells = <0x01>;
 			phandle = <0x33>;
 		};
-
+/*
 		uart@d4017000 {
 			compatible = "ns16550";
 			reg = <0x00 0xd4017000 0x00 0x100>;
@@ -1017,7 +1017,7 @@
 			clock-frequency = <0xd59f80>;
 			status = "okay";
 		};
-
+*/
 		uart@d4017800 {
 			compatible = "ns16550";
 			reg = <0x00 0xd4017800 0x00 0x100>;
