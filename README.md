@@ -90,11 +90,15 @@ make ARCH=riscv CROSS_COMPILE="/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1
 make ARCH=riscv CROSS_COMPILE="/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu-" -j16
 popd
 pushd u-boot
-CROSS_COMPILE=/opt/riscv/bin/riscv64-unknown-linux-gnu- make -j8
+CROSS_COMPILE="/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu-" make menuconfig
+-> Device Drivers                                                                                                                                x
+  x       -> Character devices                                                                                                                           x
+  x              -> RISC-V SBI console support (HVC_RISCV_SBI [=n]) 
+CROSS_COMPILE="/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu-" make -j8
 cp ../opensbi/build/platform/generic/firmware/fw_dynamic.itb .
 cp ../linux-6.1/arch/riscv/boot/Image .
 dtc -I dts -O dtb -o k1-x_opensbi-deb1.dtb ../k1-x_opensbi-deb1.dts
-dtc -I dts -O dtb -o k1-x_rt-deb1.dtb ../k1-x_rt-deb1.dts
+dtc -I dts -O dtb -o k1-x_rt-deb1.dtb ../k1-x_rt-deb1-sbi-console.dts
 dtc -I dts -O dtb -o k1-x_u-boot-deb1.dtb ../k1-x_u-boot-deb1.dts
 cp ../initramfs.cpio.gz .
 truncate -s %64 u-boot-nodtb.bin
