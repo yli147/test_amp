@@ -87,14 +87,14 @@ git clone https://github.com/yli147/linux.git --single-branch -b bl-v1.0.y linux
 # original from https://gitee.com/bianbu-linux/linux-6.1 -b bl-v1.0.y
 pushd linux-6.1
 make ARCH=riscv CROSS_COMPILE="/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu-" k1_defconfig
-make ARCH=riscv CROSS_COMPILE="/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu-" -j16
-popd
-pushd u-boot
-CROSS_COMPILE="/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu-" make menuconfig
+make ARCH=riscv CROSS_COMPILE="/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu-" menuconfig
 -> Device Drivers                                                                                                                                x
   x       -> Character devices                                                                                                                           x
   x              -> RISC-V SBI console support (HVC_RISCV_SBI [=n]) 
-CROSS_COMPILE="/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu-" make -j8
+make ARCH=riscv CROSS_COMPILE="/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu-" -j16
+popd
+pushd u-boot
+CROSS_COMPILE=/opt/riscv/bin/riscv64-unknown-linux-gnu- make -j8
 cp ../opensbi/build/platform/generic/firmware/fw_dynamic.itb .
 cp ../linux-6.1/arch/riscv/boot/Image .
 dtc -I dts -O dtb -o k1-x_opensbi-deb1.dtb ../k1-x_opensbi-deb1.dts
