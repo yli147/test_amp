@@ -1024,7 +1024,7 @@
 			reg = <0x00 0xc0000000 0x00 0x400000>;
 			datarate = <0x960>;
 		};
-
+/*
 		ethernet@cac80000 {
 			compatible = "spacemit,k1x-emac";
 			reg = <0x00 0xcac80000 0x00 0x420>;
@@ -1059,7 +1059,7 @@
 				};
 			};
 		};
-
+*/
 		udc@c0900100 {
 			compatible = "spacemit,mv-udc";
 			reg = <0x00 0xc0900100 0x00 0x4000>;
