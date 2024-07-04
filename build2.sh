@@ -15,8 +15,11 @@ pushd u-boot
 CROSS_COMPILE=/opt/riscv/bin/riscv64-unknown-linux-gnu- make -j8
 cp ../opensbi/build/platform/generic/firmware/fw_dynamic.itb .
 cp ../linux-6.1/arch/riscv/boot/Image .
-dtc -I dts -O dtb -o k1-x_rt-deb1.dtb ../k1-x_rt-deb1.dts
+dtc -I dts -O dtb -o k1-x_opensbi-deb1.dtb ../k1-x_opensbi-deb1.dts
+dtc -I dts -O dtb -o k1-x_rt-deb1.dtb ../k1-x_rt-deb1-sbi-console.dts
+dtc -I dts -O dtb -o k1-x_u-boot-deb1.dtb ../k1-x_u-boot-deb1.dts
 truncate -s %64 u-boot-nodtb.bin
 truncate -s %64 Image
+cp ../initramfs.cpio.gz .
 ./tools/mkimage -f u-boot-new2.its -A riscv -O u-boot -T firmware u-boot-new.itb
 popd

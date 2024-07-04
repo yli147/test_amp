@@ -8,15 +8,16 @@
 	modules_usrload = "8852bs";
 
 	aliases {
-		serial0 = "/soc/serial@d4017000";
+		serial0 = "/soc/serial@d4017800";
+		/*
 		serial1 = "/soc/uart@d4017100";
 		serial2 = "/soc/uart@d4017200";
 		serial3 = "/soc/uart@d4017300";
 		serial4 = "/soc/uart@d4017400";
 		serial5 = "/soc/uart@d4017500";
 		serial6 = "/soc/uart@d4017600";
-		serial7 = "/soc/uart@d4017700";
-		serial8 = "/soc/uart@d4017800";
+		serial7 = "/soc/uart@d4017700"; */
+		/* serial8 = "/soc/uart@d4017800"; */
 		mmc0 = "/soc/sdh@d4280000";
 		mmc1 = "/soc/sdh@d4280800";
 		mmc2 = "/soc/sdh@d4281000";
@@ -1478,7 +1479,25 @@
 				};
 			};
 		};
+		
+		uart@d4017800 {
+			compatible = "spacemit,pxa-uart";
+			interrupt-parent = <0x1e>;
+			reg = <0x00 0xd4017800 0x00 0x100>;
+			interrupts = <0x33>;
+			clocks = <0x02 0x42 0x02 0xb4>;
+			clock-names = "func\0gate";
+			clk-fpga = <0xe11130>;
+			resets = <0x1f 0x32>;
+			power-domains = <0x20 0x00>;
+			clk,pm-runtime,no-sleep;
+			cpuidle,pm-runtime,sleep;
+			interconnects = <0x22>;
+			interconnect-names = "dma-mem";
+			status = "disabled";
+		};
 
+/*
 		serial@d4017000 {
 			compatible = "spacemit,pxa-uart";
 			reg = <0x00 0xd4017000 0x00 0x100>;
@@ -1499,7 +1518,8 @@
 			pinctrl-names = "default";
 			pinctrl-0 = <0x23>;
 		};
-
+*/
+/*
 		uart@d4017100 {
 			compatible = "spacemit,pxa-uart";
 			reg = <0x00 0xd4017100 0x00 0x100>;
@@ -1620,7 +1640,8 @@
 			interconnect-names = "dma-mem";
 			status = "disabled";
 		};
-
+*/		
+/*
 		uart@d4017800 {
 			compatible = "spacemit,pxa-uart";
 			interrupt-parent = <0x1e>;
@@ -1637,7 +1658,7 @@
 			interconnect-names = "dma-mem";
 			status = "disabled";
 		};
-
+*/
 		mailbox@d4013400 {
 			compatible = "spacemit,k1-x-mailbox";
 			reg = <0x00 0xd4013400 0x00 0x100>;
