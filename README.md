@@ -179,6 +179,37 @@ sudo cp linux-6.1-rc1/arch/riscv/boot/Image.itb ./mnt/vmlinuz-6.1.15
 sudo umount ./mnt
 ```
 
+# Create BusyBox Rootfs with Ethercat:
+git clone https://github.com/yli147/busybox.git -b 1_31_dev busybox-1.31.1
+cd busybox-1.31.1
+CROSS_COMPILE=/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu- make defconfig
+CROSS_COMPILE=/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu- make menuconfig
+--> Settings
+	--> Build static binary (no shared libs) 
+CROSS_COMPILE=/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu- make -j $(nproc)
+CROSS_COMPILE=/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu- make install
+
+cd _install
+mkdir -p dev
+sudo mknod dev/console c 5 1
+sudo mknod dev/ram b 1 0
+cat >> init <<EOF
+#!/bin/sh
+echo "### INIT SCRIPT ###"
+mkdir /proc /sys /tmp
+mount -t proc none /proc
+mount -t sysfs none /sys
+mount -t tmpfs none /tmp
+echo -e "\nThis boot took $(cut -d' ' -f1 /proc/uptime) seconds\n"
+exec /bin/sh
+EOF
+
+chmod a+x init
+sudo chown root:root init
+sudo chown root:root dev
+find -print0 | cpio -0oH newc | gzip -9 > ../../initramfs.cpio.gz
+cd ../../
+
 # Notes:
 In the latest code u-boot device tree, I have added uart9 (GPIO72/GPIO73) as the default stdout uart, 
 so you need connect GPIO72/73 with a UART terminal to see the opensbi log.
