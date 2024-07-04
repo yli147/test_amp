@@ -162,6 +162,7 @@ unzip bianbu-23.10-desktop-k1-v1.0rc1-release-20240429194149.img.zip
 loopdevice=`sudo losetup --partscan --find --show ./bianbu-23.10-desktop-k1-v1.0rc1-release-20240429194149.img`
 sudo dd if=${loopdevice}p5 of=/dev/sde5 bs=8M status=progress && sync
 sudo dd if=${loopdevice}p6 of=/dev/sde6 bs=8M status=progress && sync
+sudo losetup -D ${loopdevice}
 ```
 Plugout and Plugin the SDCard again
 ```
