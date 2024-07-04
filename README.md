@@ -179,7 +179,8 @@ sudo cp linux-6.1-rc1/arch/riscv/boot/Image.itb ./mnt/vmlinuz-6.1.15
 sudo umount ./mnt
 ```
 
-# Create BusyBox Rootfs with Ethercat:
+# Create BusyBox Rootfs with Ethercat stack
+```
 git clone https://github.com/yli147/busybox.git -b 1_31_dev busybox-1.31.1
 cd busybox-1.31.1
 CROSS_COMPILE=/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu- make defconfig
@@ -209,6 +210,7 @@ sudo chown root:root init
 sudo chown root:root dev
 find -print0 | cpio -0oH newc | gzip -9 > ../../initramfs.cpio.gz
 cd ../../
+```
 
 # Notes:
 In the latest code u-boot device tree, I have added uart9 (GPIO72/GPIO73) as the default stdout uart, 
