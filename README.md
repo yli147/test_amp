@@ -33,7 +33,8 @@ pushd u-boot
 make k1_defconfig
 CROSS_COMPILE=/opt/riscv/bin/riscv64-unknown-linux-gnu- make menuconfig
 (0x3100000) Maximum size of the SPL image, excluding BSS                                                    x x
-(0x3000000) Size of the SPL malloc pool 
+(0x3000000) Size of the SPL malloc pool
+* If you want to use buildroot rootfs increase the above value to 0x6100000 and 0x6000000
 CROSS_COMPILE=/opt/riscv/bin/riscv64-unknown-linux-gnu- make -j8
 popd
 ```
