@@ -220,8 +220,29 @@ git clone https://github.com/buildroot/buildroot.git -b 2023.08.x
 pushd buildroot
 make qemu_riscv64_virt_defconfig
 meke menuconfig
-  * cpio the root filesystem (for use as an initial RAM filesystem) 
-  * enable C++ support  
+Toolchain  ---> -*- Toolchain type (External toolchain)  --->                                                               x x
+  x x                                          *** Toolchain External Options ***                                                                      x x
+  x x                                          Toolchain (Custom toolchain)  --->                                                                      x x
+  x x                                          Toolchain origin (Pre-installed toolchain)  --->                                                        x x
+  x x                                      (/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1) Toolchain path                                          x x
+  x x                                      (riscv64-unknown-linux-gnu) Toolchain prefix                                                                x x
+  x x                                          External toolchain gcc version (13.x)  --->                                                             x x
+  x x                                          External toolchain kernel headers series (6.4.x or later)  --->                                         x x
+  x x                                          External toolchain C library (glibc)  --->                                                              x x
+  x x                                      [*] Toolchain has SSP support?                                                                              x x
+  x x                                      [*]   Toolchain has SSP strong support?                                                                     x x
+  x x                                      [ ] Toolchain has RPC support?                                                                              x x
+  x x                                      [*] Toolchain has C++ support?                                                                              x x
+  x x                                      [ ] Toolchain has D support?                                                                                x x
+  x x                                      [*] Toolchain has Fortran support?                                                                          x x
+  x x                                      [*] Toolchain has OpenMP support? 
+Target packages  ---> -*- BusyBox
+  x x                                      [*]   Show packages that are also provided by busybox                                                       x x
+Target packages  ---> -*-  System tools
+  x x                                      [*] kmod                                                                                                    x x
+  x x                                      [*]   kmod utilities                                                                                        x x
+Filesystem images
+ x x                                      [*] cpio the root filesystem (for use as an initial RAM filesystem)                                         x x
 make -j $(nproc)
 ls ./output/images/rootfs.cpio
 popd
