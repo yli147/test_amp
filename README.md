@@ -336,6 +336,7 @@ sudo dd if=u-boot/FSBL.bin of=${loopdevice}p1
 sudo dd if=env.bin of=${loopdevice}p2
 sudo dd if=bootinfo_sd.bin of=${loopdevice}
 sudo losetup -D ${loopdevice}
+sudo dd if=disk.img of=/dev/sdf bs=8M status=progress && sync
 ```
 In the RT Domain OS console
 ```
