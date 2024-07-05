@@ -34,7 +34,6 @@ make k1_defconfig
 CROSS_COMPILE=/opt/riscv/bin/riscv64-unknown-linux-gnu- make menuconfig
 (0x3100000) Maximum size of the SPL image, excluding BSS                                                    x x
 (0x3000000) Size of the SPL malloc pool
-* If you want to use buildroot rootfs increase the above value to 0x6100000 and 0x6000000
 CROSS_COMPILE=/opt/riscv/bin/riscv64-unknown-linux-gnu- make -j8
 popd
 ```
@@ -304,6 +303,9 @@ make ARCH=riscv CROSS_COMPILE="/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1
 make ARCH=riscv CROSS_COMPILE="/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu-" -j16
 popd
 pushd u-boot
+CROSS_COMPILE=/opt/riscv/bin/riscv64-unknown-linux-gnu- make menuconfig
+(0x6100000) Maximum size of the SPL image, excluding BSS                                                    x x
+(0x6000000) Size of the SPL malloc pool
 CROSS_COMPILE=/opt/riscv/bin/riscv64-unknown-linux-gnu- make -j8
 cp ../opensbi/build/platform/generic/firmware/fw_dynamic.itb .
 cp ../linux-6.1/arch/riscv/boot/Image .
