@@ -220,7 +220,7 @@ cd $WORKDIR
 git clone https://github.com/buildroot/buildroot.git -b 2023.08.x
 pushd buildroot
 make qemu_riscv64_virt_defconfig
-meke menuconfig
+make menuconfig
 Toolchain  ---> -*- Toolchain type (External toolchain)  --->                                                               x x
   x x                                          *** Toolchain External Options ***                                                                      x x
   x x                                          Toolchain (Custom toolchain)  --->                                                                      x x
