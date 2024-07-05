@@ -268,7 +268,7 @@ sudo chown root:root * -R
 sudo -E find -print0 | sudo -E cpio -0oH newc | sudo -E gzip -9 > ../initramfs.cpio.gz
 ```
 
-# Add Ethercat bin/lib to the buildroot rootfs
+# In the RT Domain OS console
 ```
 vi etc/sysconfig/ethercat
   MASTER0_DEVICE="XX:XX:XX:XX:XX:XX" # the eth0 mac address
