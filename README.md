@@ -285,7 +285,7 @@ sudo cp ../ethercat/devices/ec_generic.ko ./lib/modules/6.1.15+/kernel/drivers/n
 sudo cp ../solo_axis/solo_axis_igh ./
 sudo cp ../run_motor.sh ./
 riscv64-linux-gnu-readelf -d ./bin/ethercat
-sudo cp ../ethercat /etc/init.d/ethercat   <== This involves a patch to fixing the modporbe issue
+sudo cp ../ethercat-init-script /etc/init.d/ethercat   <== This involves a patch to fixing the modporbe issue
 sudo chown root:root * -R
 sudo -E find -print0 | sudo -E cpio -0oH newc | sudo -E gzip -9 > ../initramfs.cpio.gz
 ```
