@@ -263,20 +263,23 @@ sudo cp ../ethercat/devices/ec_generic.ko ./lib/modules/6.1.15+/kernel/drivers/n
 sudo cp ../solo_axis/solo_axis_igh ./
 sudo cp ../run_motor.sh ./
 riscv64-linux-gnu-readelf -d ./bin/ethercat
-sudo cp /opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/sysroot/lib/libstdc++.so* ./lib/
-sudo cp /opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/sysroot/lib/libc.so.6 ./lib
-sudo cp /opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/sysroot/lib/libm.so.6 ./lib
-sudo chown root:root ./lib/libstdc++.so*
-sudo chown root:root ./lib/libc.so.6*
-sudo chown root:root ./lib/libm.so.6*
-sudo vim etc/sysconfig/ethercat
-  MASTER0_DEVICE="70:b3:d5:92:f5:12" # the eth0 mac address
-  DEVICE_MODULES="generic"
-sudo cp -rf /opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/sysroot/lib/* ./rootfs/lib/  
+sudo cp ../ethercat /etc/init.d/ethercat   <== This involves a patch to fixing the modporbe issue
 sudo chown root:root * -R
 sudo -E find -print0 | sudo -E cpio -0oH newc | sudo -E gzip -9 > ../initramfs.cpio.gz
 ```
 
+# Add Ethercat bin/lib to the buildroot rootfs
+```
+vi etc/sysconfig/ethercat
+  MASTER0_DEVICE="XX:XX:XX:XX:XX:XX" # the eth0 mac address
+  DEVICE_MODULES="generic"
+ifconfig -a
+udhcp -i eth0
+/etc/init.d/ethercat start    <== Ingore the modinfo missing error
+ethercat master
+solo_axis_igh 
+```
+  
 # Notes:
 In the latest code u-boot device tree, I have added uart9 (GPIO72/GPIO73) as the default stdout uart, 
 so you need connect GPIO72/73 with a UART terminal to see the opensbi log.
