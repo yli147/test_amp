@@ -320,7 +320,7 @@ truncate -s %64 initramfs.cpio.gz
 popd
 ```
 
-Flash Image
+Flash Image (Ethercat Stack)
 ```
 dd if=/dev/zero of=disk.img bs=1M count=100
 sudo sgdisk -g --clear --set-alignment=1 \
@@ -349,6 +349,52 @@ udhcp -i eth0
 ethercat master
 solo_axis_igh 
 ```
+
+# Flash Image (Ethercat Stack) with Bianbu bootfs and rootfs
+```
+dd if=/dev/zero of=disk.img bs=1M count=9296
+sudo sgdisk -g --clear --set-alignment=1 \
+       --new=1:256:+256K:    --change-name=1:'fsbl' --attributes=3:set:2 \
+       --new=2:768:+64K:  --change-name=2:'env' --attributes=3:set:2 \
+       --new=3:896:+384K:   --change-name=3:'opensbi' --attributes=3:set:2  \
+        --new=4:1664:+96M:   --change-name=4:'uboot'  --attributes=3:set:2  \
+        --new=5:198272:+256M:   --change-name=5:'bootfs' --attributes=3:set:2  \
+       --new=6:722560:+8936M:   --change-name=6:'rootfs'  --attributes=3:set:2  \
+       disk.img
+loopdevice=`sudo losetup --partscan --find --show ./disk.img`
+sudo dd if=u-boot/u-boot-new.itb of=${loopdevice}p4
+sudo dd if=u-boot/fw_dynamic.itb of=${loopdevice}p3
+sudo dd if=u-boot/FSBL.bin of=${loopdevice}p1
+sudo dd if=env.bin of=${loopdevice}p2
+sudo dd if=bootinfo_sd.bin of=${loopdevice}
+sudo losetup -D ${loopdevice}
+sudo dd if=disk.img of=/dev/sde bs=8M status=progress && sync
+
+```
+Plugout and Plugin the SDCard
+```
+wget -c https://archive.spacemit.com/image/k1/version/bianbu/v1.0rc1/bianbu-23.10-desktop-k1-v1.0rc1-release-20240429194149.img.zip
+unzip bianbu-23.10-desktop-k1-v1.0rc1-release-20240429194149.img.zip
+loopdevice=`sudo losetup --partscan --find --show ./bianbu-23.10-desktop-k1-v1.0rc1-release-20240429194149.img`
+sudo dd if=${loopdevice}p5 of=/dev/sde5 bs=8M status=progress && sync
+sudo dd if=${loopdevice}p6 of=/dev/sde6 bs=8M status=progress && sync
+sudo losetup -D ${loopdevice}
+```
+Plugout and Plugin the SDCard again
+```
+git clone https://github.com/yli147/linux.git --single-branch -b bl-v1.0.rc1 linux-6.1-rc1
+pushd linux-6.1-rc1
+make ARCH=riscv CROSS_COMPILE="/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu-" k1_defconfig
+make ARCH=riscv CROSS_COMPILE="/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu-" -j16
+popd
+mkdir -p ./mnt/
+sudo mount /dev/sde5 ./mnt/
+dtc -I dts -O dtb -o k1-x_deb1-bianbu.dtb k1-x_deb1-bianbu.dts
+sudo cp k1-x_deb1-bianbu.dtb ./mnt/spacemit/k1-x_deb1.dtb
+sudo cp linux-6.1-rc1/arch/riscv/boot/Image.itb ./mnt/vmlinuz-6.1.15
+sudo umount ./mnt
+```
+
   
 # Notes:
 In the latest code u-boot device tree, I have added uart9 (GPIO72/GPIO73) as the default stdout uart, 
