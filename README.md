@@ -179,10 +179,11 @@ sudo cp linux-6.1-rc1/arch/riscv/boot/Image.itb ./mnt/vmlinuz-6.1.15
 sudo umount ./mnt
 ```
 
-# Create BusyBox Rootfs with Ethercat stack
+# Build BusyBox Rootfs
 ```
+cd $WORKDIR
 git clone https://github.com/yli147/busybox.git -b 1_31_dev busybox-1.31.1
-cd busybox-1.31.1
+pushd busybox-1.31.1
 CROSS_COMPILE=/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu- make defconfig
 CROSS_COMPILE=/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu- make menuconfig
 --> Settings
@@ -209,7 +210,40 @@ chmod a+x init
 sudo chown root:root init
 sudo chown root:root dev
 find -print0 | cpio -0oH newc | gzip -9 > ../../initramfs.cpio.gz
-cd ../../
+popd
+```
+
+# Build Buildroot Rootfs
+```
+cd $WORKDIR
+git clone https://github.com/buildroot/buildroot.git -b 2023.08.x
+pushd buildroot
+make qemu_riscv64_virt_defconfig
+meke menuconfig
+  * cpio the root filesystem (for use as an initial RAM filesystem) 
+  * enable C++ support  
+make -j $(nproc)
+ls ./output/images/rootfs.cpio
+popd
+```
+
+# Build Ethercat stack
+```
+cd $WORKDIR
+git clone https://gitlab.com/etherlab.org/ethercat.git ethercat
+pushd ethercat
+git checkout stable-1.6
+./bootstrap
+./configure --prefix=`realpath etherlab` --with-linux-dir=`realpath ../linux-6.1` --enable-8139too=no --enable-generic=yes CC=/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu-gcc --host=riscv64-linux-gnu    
+sudo -E make ARCH=riscv CROSS_COMPILE=/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu- V=1
+sudo -E make install
+make ARCH=riscv CROSS_COMPILE=/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu- modules
+popd
+
+git clone https://github.com/yli147/solo_axis.git solo_axis
+pushd solo_axis
+make
+popd
 ```
 
 # Notes:
