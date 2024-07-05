@@ -39,6 +39,40 @@ CROSS_COMPILE=/opt/riscv/bin/riscv64-unknown-linux-gnu- make -j8
 popd
 ```
 
+Build BusyBox Rootfs
+```
+cd $WORKDIR
+git clone https://github.com/yli147/busybox.git -b 1_31_dev busybox-1.31.1
+pushd busybox-1.31.1
+CROSS_COMPILE=/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu- make defconfig
+CROSS_COMPILE=/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu- make menuconfig
+--> Settings
+	--> Build static binary (no shared libs) 
+CROSS_COMPILE=/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu- make -j $(nproc)
+CROSS_COMPILE=/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu- make install
+
+cd _install
+mkdir -p dev
+sudo mknod dev/console c 5 1
+sudo mknod dev/ram b 1 0
+cat >> init <<EOF
+#!/bin/sh
+echo "### INIT SCRIPT ###"
+mkdir /proc /sys /tmp
+mount -t proc none /proc
+mount -t sysfs none /sys
+mount -t tmpfs none /tmp
+echo -e "\nThis boot took $(cut -d' ' -f1 /proc/uptime) seconds\n"
+exec /bin/sh
+EOF
+
+chmod a+x init
+sudo chown root:root init
+sudo chown root:root dev
+find -print0 | cpio -0oH newc | gzip -9 > ../../initramfs.cpio.gz
+popd
+```
+
 # Option1: Test AMP (Two baremetal s-mode applications)
 Compile U-boot (The ns-hello.bin must be 64 bits aligned, otherwise the device tree blob won't be in 64 bits address which will cause opensbi boot failue)
 ```
@@ -180,40 +214,6 @@ sudo cp linux-6.1-rc1/arch/riscv/boot/Image.itb ./mnt/vmlinuz-6.1.15
 sudo umount ./mnt
 ```
 
-# Build BusyBox Rootfs
-```
-cd $WORKDIR
-git clone https://github.com/yli147/busybox.git -b 1_31_dev busybox-1.31.1
-pushd busybox-1.31.1
-CROSS_COMPILE=/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu- make defconfig
-CROSS_COMPILE=/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu- make menuconfig
---> Settings
-	--> Build static binary (no shared libs) 
-CROSS_COMPILE=/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu- make -j $(nproc)
-CROSS_COMPILE=/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu- make install
-
-cd _install
-mkdir -p dev
-sudo mknod dev/console c 5 1
-sudo mknod dev/ram b 1 0
-cat >> init <<EOF
-#!/bin/sh
-echo "### INIT SCRIPT ###"
-mkdir /proc /sys /tmp
-mount -t proc none /proc
-mount -t sysfs none /sys
-mount -t tmpfs none /tmp
-echo -e "\nThis boot took $(cut -d' ' -f1 /proc/uptime) seconds\n"
-exec /bin/sh
-EOF
-
-chmod a+x init
-sudo chown root:root init
-sudo chown root:root dev
-find -print0 | cpio -0oH newc | gzip -9 > ../../initramfs.cpio.gz
-popd
-```
-
 # Build Buildroot Rootfs
 ```
 cd $WORKDIR
@@ -290,7 +290,51 @@ sudo chown root:root * -R
 sudo -E find -print0 | sudo -E cpio -0oH newc | sudo -E gzip -9 > ../initramfs.cpio.gz
 ```
 
-# In the RT Domain OS console
+# Option5: Test AMP (Uboot +  Linux w/ EtherCat Stack)
+```
+git clone https://github.com/yli147/linux.git --single-branch -b bl-v1.0.y linux-6.1
+# original from https://gitee.com/bianbu-linux/linux-6.1 -b bl-v1.0.y
+pushd linux-6.1
+make ARCH=riscv CROSS_COMPILE="/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu-" k1_defconfig
+make ARCH=riscv CROSS_COMPILE="/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu-" menuconfig
+-> Device Drivers                                                                                                                                x
+  x       -> Character devices                                                                                                                           x
+  x              -> RISC-V SBI console support (HVC_RISCV_SBI [=n]) 
+make ARCH=riscv CROSS_COMPILE="/opt/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu-" -j16
+popd
+pushd u-boot
+CROSS_COMPILE=/opt/riscv/bin/riscv64-unknown-linux-gnu- make -j8
+cp ../opensbi/build/platform/generic/firmware/fw_dynamic.itb .
+cp ../linux-6.1/arch/riscv/boot/Image .
+dtc -I dts -O dtb -o k1-x_opensbi-deb1.dtb ../k1-x_opensbi-deb1.dts
+dtc -I dts -O dtb -o k1-x_rt-deb1.dtb ../k1-x_rt-deb1-sbi-console.dts
+dtc -I dts -O dtb -o k1-x_u-boot-deb1.dtb ../k1-x_u-boot-deb1.dts
+cp ../initramfs.cpio.gz .
+truncate -s %64 u-boot-nodtb.bin
+truncate -s %64 Image
+truncate -s %64 initramfs.cpio.gz
+./tools/mkimage -f u-boot-new3.its -A riscv -O u-boot -T firmware u-boot-new.itb
+popd
+```
+
+Flash Image
+```
+dd if=/dev/zero of=disk.img bs=1M count=100
+sudo sgdisk -g --clear --set-alignment=1 \
+       --new=1:256:+256K:    --change-name=1:'fsbl' --attributes=3:set:2 \
+       --new=2:768:+64K:  --change-name=2:'env' --attributes=3:set:2 \
+       --new=3:896:+384K:   --change-name=3:'opensbi' --attributes=3:set:2  \
+        --new=4:1664:+96M:   --change-name=4:'uboot'  --attributes=3:set:2  \
+       disk.img
+loopdevice=`sudo losetup --partscan --find --show ./disk.img`
+sudo dd if=u-boot/u-boot-new.itb of=${loopdevice}p4
+sudo dd if=u-boot/fw_dynamic.itb of=${loopdevice}p3
+sudo dd if=u-boot/FSBL.bin of=${loopdevice}p1
+sudo dd if=env.bin of=${loopdevice}p2
+sudo dd if=bootinfo_sd.bin of=${loopdevice}
+sudo losetup -D ${loopdevice}
+```
+In the RT Domain OS console
 ```
 vi etc/sysconfig/ethercat
   MASTER0_DEVICE="XX:XX:XX:XX:XX:XX" # the eth0 mac address
