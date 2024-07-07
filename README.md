@@ -338,16 +338,18 @@ sudo dd if=bootinfo_sd.bin of=${loopdevice}
 sudo losetup -D ${loopdevice}
 sudo dd if=disk.img of=/dev/sdf bs=8M status=progress && sync
 ```
-In the RT Domain OS console
+After bootup, in the RT Domain OS console
 ```
 vi etc/sysconfig/ethercat
   MASTER0_DEVICE="XX:XX:XX:XX:XX:XX" # the eth0 mac address
   DEVICE_MODULES="generic"
 ifconfig -a
 udhcp -i eth0
-/etc/init.d/ethercat start    <== Ingore the modinfo missing error
+/etc/init.d/ethercat start
 ethercat master
-solo_axis_igh 
+/run_motor.sh
+OR if the OS is real timey
+/solo_axis_igh 
 ```
 
 # Flash Image (Ethercat Stack) with Bianbu bootfs and rootfs
@@ -393,6 +395,19 @@ dtc -I dts -O dtb -o k1-x_deb1-bianbu.dtb k1-x_deb1-bianbu.dts
 sudo cp k1-x_deb1-bianbu.dtb ./mnt/spacemit/k1-x_deb1.dtb
 sudo cp linux-6.1-rc1/arch/riscv/boot/Image.itb ./mnt/vmlinuz-6.1.15
 sudo umount ./mnt
+```
+After bootup, in the RT Domain OS console
+```
+vi etc/sysconfig/ethercat
+  MASTER0_DEVICE="XX:XX:XX:XX:XX:XX" # the eth0 mac address
+  DEVICE_MODULES="generic"
+ifconfig -a
+udhcp -i eth0
+/etc/init.d/ethercat start
+ethercat master
+/run_motor.sh
+OR if the OS is real timey
+/solo_axis_igh
 ```
 
   
